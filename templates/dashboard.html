@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        AI Habit Tracker
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+
+<body>
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                AI
+            </div>
+
+            <div>
+                <h2>HabitAI</h2>
+                <span>Productivity</span>
+            </div>
+
+        </div>
+
+
+        <nav>
+
+            <button
+                class="nav-item active"
+                onclick="showSection('dashboard')"
+            >
+                📊 Dashboard
+            </button>
+
+            <button
+                class="nav-item"
+                onclick="showSection('habits')"
+            >
+                🔥 Habits
+            </button>
+
+            <button
+                class="nav-item"
+                onclick="showSection('tasks')"
+            >
+                ✅ Tasks
+            </button>
+
+            <button
+                class="nav-item"
+                onclick="showSection('analytics')"
+            >
+                📈 Analytics
+            </button>
+
+            <button
+                class="nav-item"
+                onclick="showSection('insights')"
+            >
+                🤖 AI Insights
+            </button>
+
+        </nav>
+
+
+        <div class="sidebar-footer">
+
+            <p>
+                Build better habits.
+            </p>
+
+            <small>
+                One day at a time.
+            </small>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="main-content">
+
+
+        <!-- HEADER -->
+
+        <header class="topbar">
+
+            <div>
+
+                <p class="welcome">
+                    Welcome back 👋
+                </p>
+
+                <h1>
+                    Productivity Dashboard
+                </h1>
+
+            </div>
+
+            <div class="date-display" id="currentDate"></div>
+
+        </header>
+
+
+        <!-- ================= DASHBOARD ================= -->
+
+        <section
+            id="dashboard"
+            class="page-section active-section"
+        >
+
+            <!-- STAT CARDS -->
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        🔥
+                    </div>
+
+                    <div>
+
+                        <p>
+                            Active Habits
+                        </p>
+
+                        <h2 id="totalHabits">
+                            0
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        ✅
+                    </div>
+
+                    <div>
+
+                        <p>
+                            Completed Today
+                        </p>
+
+                        <h2 id="completedHabits">
+                            0
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        📋
+                    </div>
+
+                    <div>
+
+                        <p>
+                            Pending Tasks
+                        </p>
+
+                        <h2 id="pendingTasks">
+                            0
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        ⚡
+                    </div>
+
+                    <div>
+
+                        <p>
+                            Productivity
+                        </p>
+
+                        <h2 id="productivity">
+                            0%
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- CONTENT GRID -->
+
+            <div class="dashboard-grid">
+
+
+                <!-- HABITS -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <span class="panel-label">
+                                DAILY ROUTINE
+                            </span>
+
+                            <h2>
+                                Today's Habits
+                            </h2>
+
+                        </div>
+
+                        <button
+                            class="primary-btn"
+                            onclick="openHabitModal()"
+                        >
+                            + Add Habit
+                        </button>
+
+                    </div>
+
+
+                    <div id="dashboardHabits"
+                         class="habit-list">
+
+                    </div>
+
+                </div>
+
+
+                <!-- AI -->
+
+                <div class="panel ai-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <span class="panel-label">
+                                ARTIFICIAL INTELLIGENCE
+                            </span>
+
+                            <h2>
+                                AI Coach 🤖
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div id="dashboardInsights">
+
+                        <div class="loading">
+                            Analyzing your productivity...
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- CHART -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <span class="panel-label">
+                            PERFORMANCE
+                        </span>
+
+                        <h2>
+                            Weekly Productivity
+                        </h2>
+
+                    </div>
+
+                </div>
+
+                <div class="chart-container">
+
+                    <canvas id="productivityChart"></canvas>
+
+                </div>
+
+            </div>
+
+
+            <!-- STREAK -->
+
+            <div class="streak-banner">
+
+                <div>
+
+                    <span>
+                        🔥 Longest Current Streak
+                    </span>
+
+                    <h2 id="longestStreak">
+                        0 days
+                    </h2>
+
+                </div>
+
+                <div class="streak-message">
+                    Keep building consistency!
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= HABITS ================= -->
+
+        <section
+            id="habits"
+            class="page-section"
+        >
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="panel-label">
+                        HABIT MANAGEMENT
+                    </span>
+
+                    <h1>
+                        Your Habits
+                    </h1>
+
+                </div>
+
+                <button
+                    class="primary-btn"
+                    onclick="openHabitModal()"
+                >
+                    + New Habit
+                </button>
+
+            </div>
+
+            <div
+                id="allHabits"
+                class="large-list"
+            ></div>
+
+        </section>
+
+
+        <!-- ================= TASKS ================= -->
+
+        <section
+            id="tasks"
+            class="page-section"
+        >
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="panel-label">
+                        TASK MANAGEMENT
+                    </span>
+
+                    <h1>
+                        Your Tasks
+                    </h1>
+
+                </div>
+
+                <button
+                    class="primary-btn"
+                    onclick="openTaskModal()"
+                >
+                    + New Task
+                </button>
+
+            </div>
+
+            <div
+                id="allTasks"
+                class="large-list"
+            ></div>
+
+        </section>
+
+
+        <!-- ================= ANALYTICS ================= -->
+
+        <section
+            id="analytics"
+            class="page-section"
+        >
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="panel-label">
+                        DATA & PERFORMANCE
+                    </span>
+
+                    <h1>
+                        Analytics
+                    </h1>
+
+                </div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <div class="chart-container large-chart">
+
+                    <canvas id="analyticsChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= AI INSIGHTS ================= -->
+
+        <section
+            id="insights"
+            class="page-section"
+        >
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="panel-label">
+                        AI PRODUCTIVITY COACH
+                    </span>
+
+                    <h1>
+                        Personalized Insights 🤖
+                    </h1>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="allInsights"
+                class="insights-grid"
+            ></div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================= HABIT MODAL ================= -->
+
+    <div
+        id="habitModal"
+        class="modal"
+    >
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h2>
+                    Create New Habit
+                </h2>
+
+                <button
+                    onclick="closeHabitModal()"
+                    class="close-btn"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <input
+                id="habitName"
+                type="text"
+                placeholder="Habit name"
+            >
+
+
+            <select id="habitCategory">
+
+                <option value="Health">
+                    Health
+                </option>
+
+                <option value="Fitness">
+                    Fitness
+                </option>
+
+                <option value="Learning">
+                    Learning
+                </option>
+
+                <option value="Productivity">
+                    Productivity
+                </option>
+
+                <option value="Personal">
+                    Personal
+                </option>
+
+            </select>
+
+
+            <select id="habitFrequency">
+
+                <option value="Daily">
+                    Daily
+                </option>
+
+                <option value="Weekly">
+                    Weekly
+                </option>
+
+            </select>
+
+
+            <button
+                class="primary-btn full-width"
+                onclick="createHabit()"
+            >
+                Create Habit
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= TASK MODAL ================= -->
+
+    <div
+        id="taskModal"
+        class="modal"
+    >
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h2>
+                    Create New Task
+                </h2>
+
+                <button
+                    onclick="closeTaskModal()"
+                    class="close-btn"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <input
+                id="taskTitle"
+                type="text"
+                placeholder="Task title"
+            >
+
+
+            <textarea
+                id="taskDescription"
+                placeholder="Description"
+            ></textarea>
+
+
+            <select id="taskPriority">
+
+                <option value="Low">
+                    Low Priority
+                </option>
+
+                <option value="Medium">
+                    Medium Priority
+                </option>
+
+                <option value="High">
+                    High Priority
+                </option>
+
+            </select>
+
+
+            <input
+                id="taskDueDate"
+                type="date"
+            >
+
+
+            <button
+                class="primary-btn full-width"
+                onclick="createTask()"
+            >
+                Create Task
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <script
+        src="{{ url_for('static', filename='js/dashboard.js') }}"
+    ></script>
+
+</body>
+
+</html>
